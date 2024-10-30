@@ -111,7 +111,7 @@ def read_product(product_id):
     """
     Retrieve a single Product.
 
-    This endpoint will return a single product base on it's id
+    This endpoint will return a single product based on it's id
     """
     app.logger.info("Request to Retrieve a product with id [%s]", product_id)
 
@@ -125,9 +125,25 @@ def read_product(product_id):
 # U P D A T E   A   P R O D U C T
 ######################################################################
 
-#
-# PLACE YOUR CODE TO UPDATE A PRODUCT HERE
-#
+
+@app.route("/products/<int:product_id>", methods=["PUT"])
+def update_product(product_id):
+    """
+    Update a Product.
+
+    This endpoint will return update a Product based on it's id and the body that is posted
+    """
+    app.logger.info("Request to Retrieve a product with id [%s]", product_id)
+    check_content_type("application/json")
+
+    product = Product.find(product_id)
+    if not product:
+        abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' could not be found.")
+
+    product.deserialize(request.get_json())
+    product.id = product_id
+    product.update()
+    return product.serialize(), status.HTTP_200_OK
 
 ######################################################################
 # D E L E T E   A   P R O D U C T
