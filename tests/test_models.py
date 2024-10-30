@@ -172,3 +172,16 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(foundProducts.count(), countProductsByAvailability)
         for foundProduct in foundProducts:
             self.assertEqual(foundProduct.available , firstProductAvailable)
+
+            
+    def test_find_product_by_category(self):
+        """It should find a specific Product in database by it's category"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
+        firstProductCategory = products[0].category 
+        countProductsByCategory = len([product for product in products if product.category  == firstProductCategory])
+        foundProducts = Product.find_by_category(firstProductCategory)
+        self.assertEqual(foundProducts.count(), countProductsByCategory)
+        for foundProduct in foundProducts:
+            self.assertEqual(foundProduct.category , firstProductCategory)
