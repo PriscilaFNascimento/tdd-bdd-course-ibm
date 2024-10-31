@@ -109,6 +109,7 @@ def read_all_products():
 
     name_filter = request.args.get("name")
     category_filter = request.args.get("category")
+    available_filter = request.args.get("available")
     
     if(name_filter):
         app.logger.info("Find by name: %s", name_filter)
@@ -118,6 +119,11 @@ def read_all_products():
         # create enum from string
         category_value = getattr(Category, category_filter.upper())
         products = Product.find_by_category(category_value)
+    elif(available_filter):
+        app.logger.info("Find by availability: %s", available_filter)
+        # create bool from string
+        available_value = available_filter.lower() in ["true", "yes", "1"]
+        products = Product.find_by_availability(available_value)
     else:
         app.logger.info("Find all")
         products = Product.all()
