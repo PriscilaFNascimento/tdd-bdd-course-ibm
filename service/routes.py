@@ -131,7 +131,7 @@ def update_product(product_id):
     """
     Update a Product.
 
-    This endpoint will return update a Product based on it's id and the body that is posted
+    This endpoint will update a Product based on it's id and the body that is posted
     """
     app.logger.info("Request to Retrieve a product with id [%s]", product_id)
     check_content_type("application/json")
@@ -150,6 +150,17 @@ def update_product(product_id):
 ######################################################################
 
 
-#
-# PLACE YOUR CODE TO DELETE A PRODUCT HERE
-#
+@app.route("/products/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    """
+    Delete a Product.
+
+    This endpoint will delete a Product based on it's id
+    """
+    app.logger.info("Request to Retrieve a product with id [%s]", product_id)
+
+    product = Product.find(product_id)
+    if product:
+        product.delete()
+
+    return "", status.HTTP_204_NO_CONTENT
