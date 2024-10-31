@@ -105,7 +105,16 @@ def read_all_products():
 
     This endpoint will return a a list with all the products in the database
     """
-    products = Product.all()
+    products = []
+
+    name_filter = request.args.get("name")
+
+    if(name_filter):
+        app.logger.info("Find by name: %s", name_filter)
+        products = Product.find_by_name(name_filter)
+    else:
+        app.logger.info("Find all")
+        products = Product.all()
     
     results = [product.serialize() for product in products]
     app.logger.info("[%s] Products returned", len(results))
