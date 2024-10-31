@@ -110,16 +110,16 @@ def read_all_products():
     name_filter = request.args.get("name")
     category_filter = request.args.get("category")
     available_filter = request.args.get("available")
-    
-    if(name_filter):
+
+    if (name_filter):
         app.logger.info("Find by name: %s", name_filter)
         products = Product.find_by_name(name_filter)
-    elif(category_filter):
+    elif (category_filter):
         app.logger.info("Find by category: %s", category_filter)
         # create enum from string
         category_value = getattr(Category, category_filter.upper())
         products = Product.find_by_category(category_value)
-    elif(available_filter):
+    elif (available_filter):
         app.logger.info("Find by availability: %s", available_filter)
         # create bool from string
         available_value = available_filter.lower() in ["true", "yes", "1"]
@@ -127,7 +127,7 @@ def read_all_products():
     else:
         app.logger.info("Find all")
         products = Product.all()
-    
+
     results = [product.serialize() for product in products]
     app.logger.info("[%s] Products returned", len(results))
 
@@ -136,6 +136,7 @@ def read_all_products():
 ######################################################################
 # R E A D   A   P R O D U C T
 ######################################################################
+
 
 @app.route("/products/<int:product_id>", methods=["GET"])
 def read_product(product_id):
