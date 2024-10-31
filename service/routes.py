@@ -20,7 +20,7 @@ Product Store Service with UI
 """
 from flask import jsonify, request, abort
 from flask import url_for  # noqa: F401 pylint: disable=unused-import
-from service.models import Product
+from service.models import Product, Category
 from service.common import status  # HTTP Status Codes
 from . import app
 
@@ -108,10 +108,16 @@ def read_all_products():
     products = []
 
     name_filter = request.args.get("name")
-
+    category_filter = request.args.get("category")
+    
     if(name_filter):
         app.logger.info("Find by name: %s", name_filter)
         products = Product.find_by_name(name_filter)
+    elif(category_filter):
+        app.logger.info("Find by category: %s", category_filter)
+        # create enum from string
+        category_value = getattr(Category, category_filter.upper())
+        products = Product.find_by_category(category_value)
     else:
         app.logger.info("Find all")
         products = Product.all()
