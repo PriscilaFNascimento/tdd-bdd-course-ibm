@@ -98,9 +98,19 @@ def create_products():
 # L I S T   A L L   P R O D U C T S
 ######################################################################
 
-#
-# PLACE YOUR CODE TO LIST ALL PRODUCTS HERE
-#
+@app.route("/products", methods=["GET"])
+def read_all_products():
+    """
+    Retrieve a list of Products.
+
+    This endpoint will return a a list with all the products in the database
+    """
+    products = Product.all()
+    
+    results = [product.serialize() for product in products]
+    app.logger.info("[%s] Products returned", len(results))
+
+    return results, status.HTTP_200_OK
 
 ######################################################################
 # R E A D   A   P R O D U C T
@@ -121,6 +131,7 @@ def read_product(product_id):
 
     app.logger.info("Returning product: %s", product.name)
     return product.serialize(), status.HTTP_200_OK
+
 ################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
